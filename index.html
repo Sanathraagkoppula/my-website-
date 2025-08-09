@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportopia - Book Sports Venues & Join Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFFFFF',
+                        secondary: '#10B981',
+                        dark: '#1E293B',
+                        background: '#212121'
+                        light: '#F8FAFC',
+                        
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .court-bg {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://placehold.co/1920x1080/1E293B/F8FAFC?text=Sportopia');
+            background-size: cover;
+            background-position: center;
+        }
+        .slot-selected {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .slot-booked {
+            background-color: #EF4444;
+            color: white;
+            cursor: not-allowed;
+        }
+        .slot-available:hover {
+            background-color: #EFF6FF;
+        }
+        .chat-message:hover {
+            background-color: #F1F5F9;
+        }
+        .dark .chat-message:hover {
+            background-color: #334155;
+        }
+        .faq-question i {
+        transition: transform 0.3s ease;
+        }
+        .rotate-180 {
+        transform: rotate(180deg);
+        }
+        .fa-cog, .fa-bell {
+        display: none;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-md fixed w-full z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <span class="ml-2 text-xl font-bold text-gray-800 dark:text-white">Sportopia</span>
+        <div class="hidden md:ml-6 md:flex md:space-x-8">
+          <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+          <a href="#venues" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Venues</a>
+        </div>
+      </div>
+      <div class="flex items-center" id="userSection">
+        <!-- This will be replaced dynamically -->
+        <a href="logintest.html" id="loginBtn" class="ml-4 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Login</a>
+      </div>
+    </div>
+  </div>
+</nav>
+                <div class="flex items-center">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <div class="ml-3 relative">
+                            <div>
+                                <button id="user-menu-button" class="flex items-center max-w-xs rounded-full focus:outline-none">
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="h-8 w-8 rounded-full" src="https://placehold.co/32x32/3B82F6/FFFFFF?text=U" alt="User profile picture with blue background and white U initial">
+                                </button>
+                            </div>
+                            <div id="user-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Your Profile</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Sign out</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                        <a href="login.html" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700">Login</a>
+                    </div>
+                    <div class="-mr-2 flex items-center md:hidden">
+                        <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                            <span class="sr-only">Open main menu</span>
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="#home" class="text-primary block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#venues" class="text-gray-600 dark:text-gray-300 hover:text-primary block px-3 py-2 rounded-md text-base font-medium">Venues</a>
+                <a href="#login" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-blue-700">Login</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="court-bg min-h-screen flex items-center justify-center text-white pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Play Your Favorite Sport Today</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Find and book sports venues, join games, and connect with players in your city</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#venues" class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">Book a Venue</a>
+            </div>
+        </div>
+    </section>
+    <!-- Venue Booking Section -->
+    <section id="venues" class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Sports Venues You</h2>                   
+                    <!-- Venue Cards -->
+<!-- Venue Cards Container -->
+<div id="venue-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Venue Card 1 -->
+  <div class="venue-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+      <div class="relative">
+                                <img src="GamepointKClubWarangal1733494221687.webp" alt="Modern badminton court with wooden floor and professional lighting" class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    4.8 ★
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-1"> Gamepoint K‑Club Warangal</h3>
+                                <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span>Mulugu Road, Warangal</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-gray-800 dark:text-white font-bold">₹600/hour</span>
+
+                                    <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Box cricket,Badminton</span>
+                                </div>
+                                <button class="w-full py-2 px-4 bg-primary hover:bg-blue-700 text-white rounded-md transition duration-300">
+                                    Book Now
+                                </button>
+                            </div>
+  </div>
+
+  <!-- Venue Card 2 -->
+  <div class="venue-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+      <div class="relative">
+                                <img src="../website/asstes/171596094_476476610433804_674359917033661952_n.jpg" alt="Outdoor football turf with artificial grass and flood lights" class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    4.5 ★
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-1">K Street</h3>
+                                <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span>Sthambampally</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-gray-800 dark:text-white font-bold">₹650/hour</span>
+                                    <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Box cricket</span>
+                                </div>
+                                <button class="w-full py-2 px-4 bg-primary hover:bg-blue-700 text-white rounded-md transition duration-300">
+                                    Book Now
+                                </button>
+                            </div>
+  </div>
+
+  <!-- Venue Card 3 -->
+  <div class="venue-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+      <div class="relative">
+                                <img src="asstes/box-bash-box-cricket-khila-warangal-warangal-sports-turf-grounds-k8uv189r6k.webp" alt="Professional tennis court with hard surface and net" class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    4.9 ★
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-1">Box Bash</h3>
+                                <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span>Kila Warangal</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-gray-800 dark:text-white font-bold">₹500/hour</span>
+                                    <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Box cricket</span>
+                                </div>
+                                <button class="w-full py-2 px-4 bg-primary hover:bg-blue-700 text-white rounded-md transition duration-300">
+                                    Book Now
+                                </button>
+                            </div>
+  </div>
+
+  <!-- Venue Card 4 (page 2) -->
+  <div class="venue-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+      <div class="relative">
+                                <img src="asstes/box-bash-box-cricket-khila-warangal-warangal-sports-turf-grounds-k8uv189r6k.webp" alt="Professional tennis court with hard surface and net" class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    4.9 ★
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-1">United Grounds</h3>
+                                <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm mb-2">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span>Behind Teja International High School,Hanamkonda, Waddepalle Rural</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-gray-800 dark:text-white font-bold">₹500/hour</span>
+                                    <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Box cricket,Foot Ball</span>
+                                </div>
+                                <button class="w-full py-2 px-4 bg-primary hover:bg-blue-700 text-white rounded-md transition duration-300">
+                                    Book Now
+                                </button>
+                            </div>
+  </div>
+</div>
+
+<!-- Pagination Buttons -->
+<div class="mt-8 flex justify-center gap-2">
+  <button id="prev-btn" class="px-3 py-1 rounded-md bg-primary text-white hover:bg-blue-800 transition">Previous</button>
+  <span id="page-indicator" class="px-3 py-1 text-white bg-blue-600 rounded-md">1</span>
+  <button id="next-btn" class="px-3 py-1 rounded-md bg-primary text-white hover:bg-blue-800 transition">Next</button>
+</div>
+
+<!-- Pagination Script for 12 Venue Cards -->
+<script>
+  const cardsPerPage = 3; // show 3 cards per page
+  const venueCards = document.querySelectorAll('.venue-card');
+  let currentPage = 1;
+  const totalPages = Math.ceil(venueCards.length / cardsPerPage);
+  const pageIndicator = document.getElementById('page-indicator');
+
+  function showPage(page) {
+    venueCards.forEach((card, index) => {
+      const pageIndex = Math.floor(index / cardsPerPage) + 1;
+      if (pageIndex === page) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    pageIndicator.textContent = `${page} / ${totalPages}`;
+  }
+
+  // Initial load
+  showPage(currentPage);
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+    } else {
+      currentPage = 1; // loop back to first page
+    }
+    showPage(currentPage);
+  });
+
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+    } else {
+      currentPage = totalPages; // loop to last page
+    }
+    showPage(currentPage);
+  });
+</script>
+</div>
+
+            <!-- Featured Venues -->
+            <div class="mt-16">
+                <h3 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Featured Venues</h3>  
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto max-w-7xl">
+                  <div class="relative rounded-lg overflow-hidden shadow-lg h-64">
+    <img src="GamepointKClubWarangal1733494221687.webp" alt="Premium badminton courts" class="w-full h-full object-cover">
+    
+    <!-- Full overlay -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md p-4 flex flex-col justify-between rounded-lg">
+        
+        <!-- Top section: Name + rating -->
+        <div class="flex justify-between items-start">
+            <h4 class="text-white font-bold text-xl">Gamepoint k-club Warangal</h4>
+            <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                4.8 ★
+            </div>
+        </div>
+        
+        <!-- Bottom section: Details -->
+        <div class="text-gray-200 text-m">
+            <p>4 courts • AC facility</p>
+            <p>4 international-standard badminton courts</p>
+            <p>Indoor cricket nets with a bowling machine</p>
+            <p>2 table tennis tables</p>
+            <p>Box cricket and football are also supported.</p>
+        </div>
+    </div>
+</div>
+
+  <div class="relative rounded-lg overflow-hidden shadow-lg h-64">
+    <img src="GamepointKClubWarangal1733494221687.webp" alt="Premium badminton courts" class="w-full h-full object-cover">
+    
+    <!-- Full overlay -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md p-4 flex flex-col justify-between rounded-lg">
+        
+        <!-- Top section: Name + rating -->
+        <div class="flex justify-between items-start">
+            <h4 class="text-white font-bold text-xl">K Street</h4>
+            <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                4.8 ★
+            </div>
+        </div>
+        
+        <!-- Bottom section: Details -->
+        <div class="text-gray-200 text-m">
+            <p>4 courts • AC facility</p>
+            <p>4 international-standard badminton courts</p>
+            <p>Indoor cricket nets with a bowling machine</p>
+            <p>2 table tennis tables</p>
+            <p>Box cricket and football are also supported.</p>
+        </div>
+    </div>
+</div>
+
+<div class="relative rounded-lg overflow-hidden shadow-lg h-64">
+    <img src="GamepointKClubWarangal1733494221687.webp" alt="Premium badminton courts" class="w-full h-full object-cover">
+    
+    <!-- Full overlay -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md p-4 flex flex-col justify-between rounded-lg">
+        
+        <!-- Top section: Name + rating -->
+        <div class="flex justify-between items-start">
+            <h4 class="text-white font-bold text-xl">Box Bash</h4>
+            <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                4.8 ★
+            </div>
+        </div>
+        
+        <!-- Bottom section: Details -->
+        <div class="text-gray-200 text-m">
+            <p>4 courts • AC facility</p>
+            <p>4 international-standard badminton courts</p>
+            <p>Indoor cricket nets with a bowling machine</p>
+            <p>2 table tennis tables</p>
+            <p>Box cricket and football are also supported.</p>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+            <!-- Game Types -->
+            <div class="mt-16">
+                <h3 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Different Game Formats</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto">
+                    <div class="bg-white dark:bg-gray-700 rounded-lg p-6 shadow-sm group hover:shadow-lg transition duration-300">
+                        <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition duration-300">
+                            <i class="fas fa-calendar-check text-xl text-primary dark:text-blue-300 group-hover:text-white"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Regular Sessions</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Join weekly sessions with the same group of players and improve together.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 rounded-lg p-6 shadow-sm group hover:shadow-lg transition duration-300">
+                        <div class="w-14 h-14 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:text-white transition duration-300">
+                            <i class="fas fa-trophy text-xl text-secondary dark:text-green-300 group-hover:text-white"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Tournaments</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Competitive events with prizes for winners and skill-based matchmaking.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 rounded-lg p-6 shadow-sm group hover:shadow-lg transition duration-300">
+                        <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                            <i class="fas fa-users text-xl text-purple-600 dark:text-purple-300 group-hover:text-white"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Social Mixers</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Casual games focused on meeting new people and having fun.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="py-16 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">What Our Players Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/48x48/3B82F6/FFFFFF?text=AR" alt="Player Ayush's profile picture">
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800 dark:text-white">Ayush R.</h4>
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"I've met so many players through Sportopia. The platform makes it super easy to find games and book courts. Highly recommended for anyone who loves sports!"</p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/48x48/10B981/FFFFFF?text=SM" alt="Player Sneha's profile picture">
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800 dark:text-white">Sneha M.</h4>
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"As a regular tennis player, I struggled to find opponents at my level. Sportopia changed that with their skill-based matching. Now I play competitive matches weekly."</p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/48x48/F59E0B/FFFFFF?text=VK" alt="Player Vikram's profile picture">
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800 dark:text-white">Vikram K.</h4>
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"My sports complex saw a 40% increase in bookings after listing on Sportopia. The management dashboard makes it easy to handle all bookings in one place."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- FAQ Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">
+      Frequently Asked Questions
+    </h2>
+
+    <div class="max-w-3xl mx-auto">
+
+      <!-- FAQ Item 1 -->
+      <div class="mb-4 border-b border-gray-200 dark:border-gray-700 pb-4">
+        <button class="faq-question flex justify-between items-center w-full text-left font-medium text-gray-800 dark:text-white hover:text-primary focus:outline-none">
+          <span>How do I book a sports venue?</span>
+          <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-answer mt-2 text-gray-600 dark:text-gray-300 hidden">
+          <p>
+            Booking a venue is simple! Just search for the sport you want to play, select your preferred venue, choose an available time slot, and complete the payment. You'll receive a confirmation with all the details.
+          </p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 2 -->
+      <div class="mb-4 border-b border-gray-200 dark:border-gray-700 pb-4">
+        <button class="faq-question flex justify-between items-center w-full text-left font-medium text-gray-800 dark:text-white hover:text-primary focus:outline-none">
+          <span>Can I cancel my booking?</span>
+          <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-answer mt-2 text-gray-600 dark:text-gray-300 hidden">
+          <p>
+            Yes, you can cancel your booking through your account dashboard. Cancellation policies vary by venue - some allow full refunds if cancelled 24 hours before the booking, while others may have different terms.
+          </p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 3 -->
+      <div class="mb-4 border-b border-gray-200 dark:border-gray-700 pb-4">
+        <button class="faq-question flex justify-between items-center w-full text-left font-medium text-gray-800 dark:text-white hover:text-primary focus:outline-none">
+          <span>How does the Karma points system work?</span>
+          <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-answer mt-2 text-gray-600 dark:text-gray-300 hidden">
+          <p>
+            Karma points are earned by participating in games, showing up on time, receiving positive ratings from other players, and being active in the community. Higher Karma gives you access to premium games and special discounts.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Toggle Script -->
+<script>
+  document.querySelectorAll(".faq-question").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const answer = btn.nextElementSibling;
+      const icon = btn.querySelector("i");
+
+      // Toggle visibility of the answer
+      answer.classList.toggle("hidden");
+
+      // Rotate the arrow
+      icon.classList.toggle("rotate-180");
+    });
+  });
+</script>
+<script>
+  const userSection = document.getElementById('userSection');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (currentUser) {
+    userSection.innerHTML = `
+      <div class="relative group">
+        <button class="font-semibold text-gray-800 dark:text-white">Hello, ${currentUser.name} ▾</button>
+        <div class="absolute hidden group-hover:block bg-white dark:bg-gray-700 shadow rounded mt-2 right-0 w-40">
+          <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Your Profile</a>
+          <button id="logoutBtn" class="w-full text-left block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">Logout</button>
+        </div>
+      </div>
+    `;
+
+    // Add logout functionality
+    document.body.addEventListener('click', e => {
+      if (e.target.id === 'logoutBtn') {
+        localStorage.removeItem('currentUser');
+        location.reload();
+      }
+    });
+  }
+</script>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
+
+
+
+
+
+</body>
+
+</html>

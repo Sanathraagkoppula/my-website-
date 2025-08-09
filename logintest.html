@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sportopia - Login or Signup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 w-full max-w-md">
+    <div class="text-center">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white" id="form-title">Login to Sportopia</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2" id="form-subtitle">Welcome back! Please sign in.</p>
+    </div>
+
+    <!-- Auth Form -->
+    <form id="authForm" class="mt-6 space-y-4">
+
+      <!-- Name (only for signup) -->
+      <div id="nameField" class="hidden">
+        <label class="block text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+        <input type="text" id="name" placeholder="John Doe"
+               class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Phone Number (only for signup) -->
+      <div id="phoneField" class="hidden">
+        <label class="block text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+        <input type="tel" id="phone" placeholder="9876543210"
+               class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-gray-700 dark:text-gray-300 mb-1">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" 
+               class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-gray-700 dark:text-gray-300 mb-1">Password</label>
+        <div class="relative">
+          <input type="password" id="password" placeholder="Enter your password"
+                 class="w-full px-4 py-2 rounded-lg border dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10" required>
+          <span id="togglePassword" class="absolute right-3 top-3 cursor-pointer text-gray-500"><i class="fas fa-eye"></i></span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" 
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition" id="submitBtn">
+        Login
+      </button>
+    </form>
+
+    <!-- Toggle between login/signup -->
+    <p class="text-center text-gray-600 dark:text-gray-400 mt-6">
+      <span id="toggleText">Don't have an account?</span>
+      <button class="text-blue-500 hover:underline" id="toggleBtn">Sign up</button>
+    </p>
+    <!-- Forgot Password Link -->
+ <p class="text-right mt-2">
+  <a href="password.html" target="_blank" class="text-blue-500 hover:underline">Forgot Password?</a>
+</p>
+
+  </div>
+
+  <script>
+    const formTitle = document.getElementById('form-title');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const toggleText = document.getElementById('toggleText');
+    const authForm = document.getElementById('authForm');
+    const nameField = document.getElementById('nameField');
+    const phoneField = document.getElementById('phoneField');
+
+    let isLoginMode = true; // Start in login mode
+
+    // Toggle between Login and Signup
+    toggleBtn.addEventListener('click', () => {
+      isLoginMode = !isLoginMode;
+      if (isLoginMode) {
+        formTitle.textContent = "Login to Sportopia";
+        formSubtitle.textContent = "Welcome back! Please sign in.";
+        submitBtn.textContent = "Login";
+        toggleText.textContent = "Don't have an account?";
+        toggleBtn.textContent = "Sign up";
+        nameField.classList.add("hidden");
+        phoneField.classList.add("hidden");
+      } else {
+        formTitle.textContent = "Create Your Sportopia Account";
+        formSubtitle.textContent = "Join us and book your favorite sports venues!";
+        submitBtn.textContent = "Sign Up";
+        toggleText.textContent = "Already have an account?";
+        toggleBtn.textContent = "Login";
+        nameField.classList.remove("hidden");
+        phoneField.classList.remove("hidden");
+      }
+    });
+
+    // Toggle Password Visibility
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const pwd = document.getElementById('password');
+      const icon = document.querySelector('#togglePassword i');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        pwd.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    // Simple Validation Helpers
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function isValidPhone(phone) {
+      return /^[0-9]{10}$/.test(phone);
+    }
+
+    // Simple localStorage-based Auth for demo
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      let users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (isLoginMode) {
+        // LOGIN MODE
+        if (users[email] && users[email].password === password) {
+          alert(`✅ Welcome back, ${users[email].name}!`);
+          localStorage.setItem('currentUser', JSON.stringify(users[email]));
+          window.location.href = 'index.html';
+        } else {
+          alert("❌ Invalid email or password!");
+        }
+      } else {
+        // SIGNUP MODE
+        if (users[email]) {
+          alert("⚠️ Account already exists. Please login.");
+        } else {
+          if (!name || !phone || !isValidEmail(email) || !isValidPhone(phone)) {
+            alert("⚠️ Please enter valid name, email & phone number.");
+            return;
+          }
+          users[email] = {
+            name: name,
+            phone: phone,
+            password: password,
+            email: email
+          };
+          localStorage.setItem('users', JSON.stringify(users));
+          alert("🎉 Account created successfully! You can now login.");
+          toggleBtn.click();
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
